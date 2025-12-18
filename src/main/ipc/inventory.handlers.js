@@ -2,13 +2,25 @@ const { ipcMain } = require('electron')
 const inventoryRepo = require('@database/inventory.repository')
 
 ipcMain.handle('inventory:getAll', async () => {
-  return inventoryRepo.getAll()
+  try {
+    return inventoryRepo.getAll()
+  } catch (err) {
+    throw new Error(err.message)
+  }
 })
 
 ipcMain.handle('inventory:create', async (_event, product) => {
-  return inventoryRepo.create(product)
+  try {
+    return inventoryRepo.create(product)
+  } catch (err) {
+    throw new Error(err.message)
+  }
 })
 
 ipcMain.handle('inventory:delete', async (_event, id) => {
-  return inventoryRepo.delete(id)
+  try {
+    return inventoryRepo.delete(id)
+  } catch (err) {
+    throw new Error(err.message)
+  }
 })

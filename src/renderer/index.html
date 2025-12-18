@@ -33,8 +33,23 @@
             <!-- TOPBAR -->
             <header class="topbar">
                 <h1 id="view-title">Inventario</h1>
+
+                <div class="filters">
+                    <select id="filter-column">
+                        <option value="">Todas las categorías</option>
+                        <option value="id">ID</option>
+                        <option value="nombre">Nombre</option>
+                        <option value="descripcion">Descripción</option>
+                        <option value="tipoUnidad">Unidad</option>
+                        <option value="cantidad">Cantidad</option>
+                    </select>
+
+                    <input type="text" id="filter-text" placeholder="Buscar producto...">
+                </div>
+
                 <button id="btn-open-modal" class="btn-primary">Nuevo producto</button>
             </header>
+
 
             <!-- CONTENT -->
             <section class="content">
@@ -45,10 +60,11 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Unidad</th>
-                                <th>Cantidad</th>
-                                <th></th>
+                                <th>NOMBRE</th>
+                                <th>UNIDAD</th>
+                                <th>DESCRIPCIÓN</th>
+                                <th>CANTIDAD</th>
+                                <th>ACCIONES</th>
                             </tr>
                         </thead>
                         <tbody id="products-table"></tbody>
@@ -82,13 +98,51 @@
             <input id="cantidad" type="number" min="0" placeholder="Cantidad">
 
             <div class="modal-actions">
-                <button id="btn-cancel" class="secondary">Cancelar</button>
-                <button id="btn-save" class="primary">Guardar</button>
+                <button id="btn-cancel" class="btn-secondary">Cancelar</button>
+                <button id="btn-save" class="btn-primary">Guardar</button>
             </div>
         </div>
     </div>
 
-    <script src="./index.js"></script>
+    <!-- ================= ERROR MODAL ================= -->
+    <div class="modal" id="error-modal">
+        <div class="modal-box">
+
+            <h2>Error del sistema</h2>
+
+            <p id="error-message">
+                Ha ocurrido un error inesperado.
+            </p>
+
+            <div class="modal-actions">
+                <button id="btn-error-close" class="btn-primary">Aceptar</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= GENERIC CONFIRM MODAL ================= -->
+    <div class="modal" id="confirm-modal">
+        <div class="modal-box">
+
+            <h2 id="confirm-title">Confirmar acción</h2>
+
+            <p id="confirm-message"></p>
+
+            <div class="modal-actions">
+                <button id="btn-confirm-cancel" class="btn-secondary">
+                    Cancelar
+                </button>
+                <button id="btn-confirm-action" class="btn-danger">
+                    Confirmar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script type="module" src="./index.js"></script>
 </body>
 
 </html>

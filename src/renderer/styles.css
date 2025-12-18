@@ -109,6 +109,7 @@ body {
   background: var(--white);
   border-collapse: collapse;
   border: 1px solid var(--gray-border);
+  text-align: center;
 }
 
 .table th {
@@ -124,6 +125,7 @@ body {
 }
 
 /* ================= BUTTONS ================= */
+
 .btn-primary {
   background: var(--guinda);
   color: white;
@@ -132,6 +134,7 @@ body {
   border-radius: 3px;
   cursor: pointer;
   font-size: 14px;
+  border-radius: 5px;
 }
 
 .btn-primary:hover {
@@ -145,6 +148,11 @@ body {
   padding: 8px 14px;
   border-radius: 3px;
   cursor: pointer;
+  border-radius: 5px;
+}
+
+.btn-secondary:hover {
+  background: #CFCFCF;
 }
 
 /* ================= MODAL ================= */
@@ -162,6 +170,7 @@ body {
   padding: 24px;
   width: 360px;
   border-radius: 4px;
+  animation: modalFadeIn 0.2s ease-out;
 }
 
 .modal-box h2 {
@@ -180,4 +189,45 @@ body {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+/* Botón eliminar */
+.btn-danger {
+  background-color: #9b1c1c;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #7a1616;
+}
+
+/* Animación */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+#error-message {
+  color: #7A1F2B;
+  font-size: 14px;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.filters select,
+.filters input {
+  padding: 6px 8px;
+  border: 1px solid var(--gray-border);
+  border-radius: 3px;
+  font-size: 13px;
 }
