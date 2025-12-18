@@ -2,7 +2,17 @@
   "name": "inventario-electron",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "src/main/main.js",
+  "_moduleAliases": {
+    "@root": ".",
+    "@src": "src",
+    "@main": "src/main/main.js",
+    "@preload": "src/preload",
+    "@renderer": "src/renderer",
+    "@shared": "src/shared",
+    "@database": "src/main/database",
+    "@ipc": "src/main/ipc"
+  },
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,5 +25,9 @@
   },
   "eslintConfig": {
     "extends": "standard"
+  },
+  "dependencies": {
+    "module-alias": "^2.2.3",
+    "sqlite3": "^5.1.7"
   }
 }

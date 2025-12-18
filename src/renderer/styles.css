@@ -1,0 +1,183 @@
+:root {
+  --guinda: #244a88;
+  --guinda-dark: #1B396A;
+  --white: #FFFFFF;
+  --gray-bg: #F5F5F5;
+  --gray-text: #4A4A4A;
+  --gray-border: #D1D1D1;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--gray-bg);
+  color: var(--gray-text);
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+  width: 250px;
+  background: var(--guinda);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.25);
+}
+
+.sidebar-header .title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.sidebar-header .subtitle {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 14px 20px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.menu button:hover,
+.menu button.active {
+  background: var(--guinda-dark);
+}
+
+/* ================= MAIN ================= */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================= TOPBAR ================= */
+.topbar {
+  background: var(--white);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--gray-border);
+}
+
+.topbar h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+/* ================= CONTENT ================= */
+.content {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.view {
+  display: none;
+}
+
+.view.active {
+  display: block;
+}
+
+/* ================= TABLE ================= */
+.table {
+  width: 100%;
+  background: var(--white);
+  border-collapse: collapse;
+  border: 1px solid var(--gray-border);
+}
+
+.table th {
+  background: #EFEFEF;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.table th,
+.table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--gray-border);
+}
+
+/* ================= BUTTONS ================= */
+.btn-primary {
+  background: var(--guinda);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-primary:hover {
+  background: var(--guinda-dark);
+}
+
+.btn-secondary {
+  background: #E5E5E5;
+  color: #222;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* ================= MODAL ================= */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-box {
+  background: var(--white);
+  padding: 24px;
+  width: 360px;
+  border-radius: 4px;
+}
+
+.modal-box h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.modal-box input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid var(--gray-border);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

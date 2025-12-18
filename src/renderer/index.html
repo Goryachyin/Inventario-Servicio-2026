@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Inventario</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="title">TecNM</div>
+                <div class="subtitle">Sistema de Inventarios</div>
+            </div>
+
+            <nav class="menu">
+                <button class="menu-item active" data-view="inventory">Inventario</button>
+                <button class="menu-item" data-view="dashboard">Dashboard</button>
+                <button class="menu-item" data-view="reports">Reportes</button>
+                <button class="menu-item" data-view="settings">Configuración</button>
+            </nav>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <h1 id="view-title">Inventario</h1>
+                <button id="btn-open-modal" class="btn-primary">Nuevo producto</button>
+            </header>
+
+            <!-- CONTENT -->
+            <section class="content">
+
+                <!-- INVENTARIO -->
+                <div id="inventory" class="view active">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Unidad</th>
+                                <th>Cantidad</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table"></tbody>
+                    </table>
+                </div>
+
+                <div id="dashboard" class="view">
+                    <p>Panel institucional de indicadores (pendiente)</p>
+                </div>
+
+                <div id="reports" class="view">
+                    <p>Generación de reportes oficiales (pendiente)</p>
+                </div>
+
+                <div id="settings" class="view">
+                    <p>Configuraciones del sistema (pendiente)</p>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal" id="modal">
+        <div class="modal-box">
+            <h2>Registrar producto</h2>
+
+            <input id="nombre" placeholder="Nombre del producto">
+            <input id="descripcion" placeholder="Descripción">
+            <input id="tipoUnidad" placeholder="Unidad de medida">
+            <input id="cantidad" type="number" min="0" placeholder="Cantidad">
+
+            <div class="modal-actions">
+                <button id="btn-cancel" class="secondary">Cancelar</button>
+                <button id="btn-save" class="primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./index.js"></script>
+</body>
+
+</html>
