@@ -33,21 +33,6 @@
             <!-- TOPBAR -->
             <header class="topbar">
                 <h1 id="view-title">Inventario</h1>
-
-                <div class="filters">
-                    <select id="filter-column">
-                        <option value="">Todas las categorías</option>
-                        <option value="id">ID</option>
-                        <option value="nombre">Nombre</option>
-                        <option value="descripcion">Descripción</option>
-                        <option value="tipoUnidad">Unidad</option>
-                        <option value="cantidad">Cantidad</option>
-                    </select>
-
-                    <input type="text" id="filter-text" placeholder="Buscar producto...">
-                </div>
-
-                <button id="btn-open-modal" class="btn-primary">Nuevo producto</button>
             </header>
 
 
@@ -56,6 +41,22 @@
 
                 <!-- INVENTARIO -->
                 <div id="inventory" class="view active">
+
+                    <div class="filters">
+                        <select id="filter-column">
+                            <option value="">Todas las categorías</option>
+                            <option value="id">ID</option>
+                            <option value="nombre">Nombre</option>
+                            <option value="descripcion">Descripción</option>
+                            <option value="tipoUnidad">Unidad</option>
+                            <option value="cantidad">Cantidad</option>
+                        </select>
+
+                        <input type="text" id="filter-text" placeholder="Buscar producto...">
+                    </div>
+
+                    <button id="btn-open-modal" class="btn-primary">Nuevo producto</button>
+
                     <table class="table">
                         <thead>
                             <tr>
@@ -142,6 +143,8 @@
     </div>
 
 
+    <!-- Socket.io client para recibir notificaciones en tiempo real -->
+    <script src="/socket.io/socket.io.js"></script>
     <script type="module" src="./index.js"></script>
 </body>
 

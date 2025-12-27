@@ -23,5 +23,13 @@ contextBridge.exposeInMainWorld('inventoryAPI', {
    * @param {number} id
    * @returns {Promise<void>}
    */
-  delete: (id) => ipcRenderer.invoke('inventory:delete', id)
+  delete: (id) => ipcRenderer.invoke('inventory:delete', id),
+
+  /**
+   * Edita un producto por id
+   * @param {number} id
+   * @param {Product} product
+   * @returns {Promise<void>}
+   */
+  edit: (id, product) => ipcRenderer.invoke('inventory:edit', id, product)
 })

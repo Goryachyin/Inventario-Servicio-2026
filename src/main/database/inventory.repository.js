@@ -37,3 +37,14 @@ exports.delete = (id) => {
     )
   })
 }
+
+exports.edit = (id, product) => {
+  const { nombre, descripcion, tipoUnidad, cantidad } = product
+  return new Promise((resolve, reject) => {
+    db.run(
+      'UPDATE productos SET nombre = ?, descripcion = ?, tipoUnidad = ?, cantidad = ? WHERE id = ?',
+      [nombre, descripcion, tipoUnidad, cantidad, id],
+      function (err) { err ? reject(err) : resolve(this.changes) }
+    )
+  })
+} 

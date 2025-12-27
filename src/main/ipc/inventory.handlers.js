@@ -24,3 +24,11 @@ ipcMain.handle('inventory:delete', async (_event, id) => {
     throw new Error(err.message)
   }
 })
+
+ipcMain.handle('inventory:edit', async (_event, id, product) => {
+  try {
+    return inventoryRepo.edit(id, product)
+  } catch (err) {
+    throw new Error(err.message)
+  }
+})

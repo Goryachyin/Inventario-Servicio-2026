@@ -16,6 +16,11 @@ const descripcion = document.getElementById('descripcion')
 const tipoUnidad = document.getElementById('tipoUnidad')
 const cantidad = document.getElementById('cantidad')
 
+// Estado para edición
+let editingId = null
+const modalTitle = modal.querySelector('h2')
+
+
 const filterColumn = document.getElementById('filter-column')
 const filterText = document.getElementById('filter-text')
 
@@ -35,8 +40,22 @@ menuItems.forEach(item => {
   }
 })
 
-btnOpen.onclick = () => modal.style.display = 'flex'
-btnCancel.onclick = () => modal.style.display = 'none'
+btnOpen.onclick = () => {
+  editingId = null
+  modalTitle.textContent = 'Registrar producto'
+  btnSave.textContent = 'Guardar'
+  nombre.value = ''
+  descripcion.value = ''
+  tipoUnidad.value = ''
+  cantidad.value = ''
+  modal.style.display = 'flex'
+}
+btnCancel.onclick = () => {
+  editingId = null
+  modalTitle.textContent = 'Registrar producto'
+  btnSave.textContent = 'Guardar'
+  modal.style.display = 'none'
+} 
 
 btnSave.onclick = async () => {
   try {
@@ -44,14 +63,46 @@ btnSave.onclick = async () => {
       throw new Error('Nombre, tipo de unidad y cantidad son obligatorios')
     }
 
-    await window.inventoryAPI.create({
+    const payload = {
       nombre: nombre.value,
       descripcion: descripcion.value || 'Sin descripción',
       tipoUnidad: tipoUnidad.value,
       cantidad: Number(cantidad.value || 0)
-    })
+    }
+
+    // Si estamos en un navegador que usa la UI servida, usamos la API HTTP
+    if (typeof fetch !== 'undefined') {
+      const headers = { 'Content-Type': 'application/json' }
+      // Si existe API key en ventana, la añadimos automáticamente
+      if (window.__API_KEY__) headers['x-api-key'] = window.__API_KEY__
+
+      if (editingId) {
+        const res = await fetch(`/api/products/${editingId}`, {
+          method: 'PUT',
+          headers,
+          body: JSON.stringify(payload)
+        })
+        if (!res.ok) throw new Error('Error al actualizar el producto')
+      } else {
+        const res = await fetch('/api/products', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(payload)
+        })
+        if (!res.ok) throw new Error('Error al guardar el producto')
+      }
+    } else if (window.inventoryAPI) {
+      if (editingId && window.inventoryAPI.edit) {
+        await window.inventoryAPI.edit(editingId, payload)
+      } else if (window.inventoryAPI.create) {
+        await window.inventoryAPI.create(payload)
+      }
+    }
 
     modal.style.display = 'none'
+    editingId = null
+    modalTitle.textContent = 'Registrar producto'
+    btnSave.textContent = 'Guardar'
     await cargarProductos()
     aplicarFiltros()
 
@@ -59,7 +110,7 @@ btnSave.onclick = async () => {
     nombre.value = ''
     descripcion.value = ''
     tipoUnidad.value = ''
-    cantidad.value = ''
+    cantidad.value = '' 
   } catch (err) {
     showError(err.message || 'Error al guardar el producto')
   }
@@ -74,6 +125,12 @@ function renderTabla (lista) {
       <td>${p.tipoUnidad}</td>
       <td>${p.cantidad}</td>
       <td>
+        <button
+          class="btn-secondary btn-edit"
+          data-action="edit"
+          data-id="${p.id}">
+          Editar
+        </button>
         <button
           class="btn-secondary btn-delete"
           data-action="delete"
@@ -120,7 +177,17 @@ filterText.addEventListener('input', aplicarFiltros)
 
 async function cargarProductos () {
   try {
-    productos = await window.inventoryAPI.getAll()
+    // Preferir API HTTP si está disponible (clientes remotos o UI servida desde el servidor)
+    if (typeof fetch !== 'undefined') {
+      const res = await fetch('/api/products')
+      if (!res.ok) throw new Error('Error al obtener productos')
+      productos = await res.json()
+    } else if (window.inventoryAPI && window.inventoryAPI.getAll) {
+      productos = await window.inventoryAPI.getAll()
+    } else {
+      productos = []
+    }
+
     aplicarFiltros()
   } catch (err) {
     showError(err.message || 'Error al cargar productos')
@@ -156,6 +223,25 @@ window.addEventListener('unhandledrejection', event => {
 })
 
 tableBody.addEventListener('click', event => {
+  const editBtn = event.target.closest('[data-action="edit"]')
+  if (editBtn) {
+    const id = Number(editBtn.dataset.id)
+    const prod = productos.find(p => p.id === id)
+    if (!prod) return
+
+    // Llenar formulario para edición
+    editingId = id
+    modalTitle.textContent = 'Editar producto'
+    btnSave.textContent = 'Actualizar'
+    nombre.value = prod.nombre || ''
+    descripcion.value = prod.descripcion || ''
+    tipoUnidad.value = prod.tipoUnidad || ''
+    cantidad.value = prod.cantidad || 0
+
+    modal.style.display = 'flex'
+    return
+  }
+
   const btn = event.target.closest('[data-action="delete"]')
   if (!btn) return
 
@@ -168,11 +254,36 @@ tableBody.addEventListener('click', event => {
     message: `¿Seguro que deseas eliminar "${prod.nombre}"?`,
     confirmText: 'Eliminar',
     onConfirm: async () => {
-      await window.inventoryAPI.delete(id)
-      await cargarProductos()
-      aplicarFiltros()
+      try {
+        if (typeof fetch !== 'undefined') {
+          const headers = {}
+          if (window.__API_KEY__) headers['x-api-key'] = window.__API_KEY__
+          const res = await fetch(`/api/products/${id}`, { method: 'DELETE', headers })
+          if (!res.ok) throw new Error('Error al eliminar el producto')
+        } else if (window.inventoryAPI && window.inventoryAPI.delete) {
+          await window.inventoryAPI.delete(id)
+        }
+
+        await cargarProductos()
+        aplicarFiltros()
+      } catch (err) {
+        showError(err.message || 'Error al eliminar producto')
+      }
     }
   })
 })
 
-cargarProductos()
+// Conectar a socket.io para recibir actualizaciones en tiempo real (si está disponible)
+if (typeof io !== 'undefined') {
+  try {
+    const socket = io()
+    socket.on('inventory:changed', (rows) => {
+      productos = rows || []
+      aplicarFiltros()
+    })
+  } catch (err) {
+    console.warn('No se pudo conectar a socket.io', err)
+  }
+}
+
+// Cargar inicialmente
